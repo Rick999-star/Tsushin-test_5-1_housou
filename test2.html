@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実力テスト 第2回 | 5-1 放送</title>
+    <!-- Tailwind CSSの読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans JP) の読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        /* 採点後の正解・不正解スタイル */
+        .correct {
+            border: 2px solid #10B981; /* green-500 */
+        }
+        .incorrect {
+            border: 2px solid #EF4444; /* red-500 */
+        }
+        /* 正解表示エリア（デフォルトは非表示） */
+        .answer-feedback {
+            display: none;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .correct .answer-feedback {
+            background-color: #ECFDF5; /* green-50 */
+            color: #065F46; /* green-800 */
+        }
+        .incorrect .answer-feedback {
+            background-color: #FEF2F2; /* red-50 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        
+        <!-- ヘッダー -->
+        <header class="mb-8 py-4 border-b-2 border-purple-600">
+            <h1 class="text-3xl font-bold text-gray-800">実力テスト 第2回 (20問)</h1>
+            <p class="text-lg text-gray-600 mt-1">5-1 放送（地上デジタルテレビ放送）</p>
+        </header>
+
+        <!-- スコア表示エリア -->
+        <div id="score-container" class="hidden mb-6 p-6 bg-white rounded-lg shadow-md text-center">
+            <h2 class="text-3xl font-bold text-blue-700" id="score-text"></h2>
+        </div>
+
+        <!-- 問題フォームコンテナ -->
+        <form id="test-form" class="space-y-6">
+            <!-- 問題はJavaScriptによってここに挿入されます -->
+        </form>
+
+        <!-- 採点ボタン -->
+        <div class="mt-10 text-center">
+            <button id="submit-button" 
+                    class="bg-purple-600 text-white font-bold text-lg py-4 px-10 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-300">
+                採点する
+            </button>
+        </div>
+
+        <!-- フッター (トップへ戻る) -->
+        <footer class="mt-12 pt-6 border-t border-gray-300 text-center">
+            <a href="./index.html" 
+               class="inline-block bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-300">
+                トップページに戻る
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // 実力テスト 第2回 データ (20問)
+        const testData = [
+            {
+                type: 'mcq',
+                question: "地デジが使用するUHF帯の物理チャンネルの範囲は？",
+                options: ["1ch～12ch", "13ch～52ch", "13ch～62ch", "53ch～62ch"],
+                correctIndex: 1
+            },
+            {
+                type: 'fill',
+                question: "日本の地上デジタル放送の標準方式は [ ] と呼ばれる。",
+                keywords: ["ISDB-T"]
+            },
+            {
+                type: 'mcq',
+                question: "1チャンネル (6MHz) を多数の搬送波に分割して伝送する方式 (OFDM) で、その個々の搬送波を何と呼ぶか？",
+                options: ["セグメント", "シンボル", "サブキャリア", "フレーム"],
+                correctIndex: 2
+            },
+            {
+                type: 'fill',
+                question: "地デジ（フルセグ）で主に使用される変調方式は [ ] である。",
+                keywords: ["64QAM", "ろくよんカム"]
+            },
+            {
+                type: 'mcq',
+                question: "地デジの信号に多重化されている情報として適切でないものは？",
+                options: ["映像・音声データ", "データ放送 (EPG)", "字幕データ", "視聴者の個人情報"],
+                correctIndex: 3
+            },
+            {
+                type: 'fill',
+                question: "ハイビジョン放送 (HDTV) は、1チャンネルで最大 [ ] 本まで同時に放送可能である。",
+                keywords: ["1", "一"]
+            },
+            {
+                type: 'mcq',
+                question: "アナログ放送でVHF帯として使用されていたチャンネルは？",
+                options: ["1ch～12ch", "13ch～52ch", "1ch～62ch", "13ch～62ch"],
+                correctIndex: 0
+            },
+            {
+                type: 'fill',
+                question: "MPEG-2は、別名 [ ] とも呼ばれる。",
+                keywords: ["H.262"]
+            },
+            {
+                type: 'mcq',
+                question: "OFDMが強い耐性を持つ妨害はどれか？",
+                options: ["マルチパス妨害", "スノーノイズ", "電波減衰", "太陽ノイズ"],
+                correctIndex: 0
+            },
+            {
+                type: 'fill',
+                question: "地デジにおいて、1チャンネルが占有する周波数帯域幅は [ ] MHzである。",
+                keywords: ["6", "六"]
+            },
+            {
+                type: 'mcq',
+                question: "「ワンセグ」の名称の由来は？",
+                options: ["1番目のセグメントだけを使うから", "1セグメントを使用するから", "画質が1番低いから", "1インチの画面用だから"],
+                correctIndex: 1
+            },
+            {
+                type: 'mcq',
+                question: "映像符号化方式 HEVC (H.265) の特徴は？",
+                options: ["H.264より圧縮効率が約半分", "H.264より圧縮効率が約2倍", "MPEG-2の別名である", "音声専用の規格である"],
+                correctIndex: 1
+            },
+            {
+                type: 'fill',
+                question: "フルセグ（固定受信用）は、[ ] 個のセグメントを使用する。",
+                keywords: ["12", "十二"]
+            },
+            {
+                type: 'mcq',
+                question: "MP3とは何の規格か？",
+                options: ["MPEG-2の映像圧縮規格", "MPEG-1の音声圧縮規格", "MPEG-4の音声圧縮規格", "地デジのデータ放送規格"],
+                correctIndex: 1
+            },
+            {
+                type: 'fill',
+                question: "伝送路のノイズやエラーからデータを保護するために付加される符号を [ ] 符号と呼ぶ。",
+                keywords: ["誤り訂正", "誤り訂正符号"]
+            },
+            {
+                type: 'mcq',
+                question: "6MHzの帯域幅を13セグメントに分割するメリットとして、適切でないものは？",
+                options: ["障害発生時も他のセグメントに影響が出にくい", "柔軟なサービス提供（HD/SD/ワンセグ）が可能", "周波数を効率的に利用できる", "電波の伝送距離を大幅に伸ばせる"],
+                correctIndex: 3
+            },
+            {
+                type: 'fill',
+                question: "アナログ放送時代のゴースト障害は、地デジでは伝送方式 [ ] の採用により原理的に解消された。",
+                keywords: ["OFDM"]
+            },
+            {
+                type: 'mcq',
+                question: "6ビットの情報を一度に表現できる変調方式は？",
+                options: ["16QAM", "32QAM", "64QAM", "256QAM"],
+                correctIndex: 2
+            },
+            {
+                type: 'fill',
+                question: "地デジの周波数帯 470MHz～710MHz は、[ ] 帯 (極超短波) に分類される。",
+                keywords: ["UHF"]
+            },
+            {
+                type: 'mcq',
+                question: "地デジの有料放送などで使用されるコピー制御の仕組みは？",
+                options: ["MPEG-2", "B-CASカード", "OFDM", "ISDB-T"],
+                correctIndex: 1
+            }
+        ];
+
+        // ページ読み込み時に問題を描画する
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('test-form');
+            if (!form) return;
+
+            testData.forEach((item, index) => {
+                const questionIndex = index + 1;
+                let contentHtml = '';
+
+                if (item.type === 'mcq') {
+                    // 4択問題のHTML
+                    const optionsHtml = item.options.map((option, i) => `
+                        <label class="block p-3 rounded-md border border-gray-300 hover:bg-gray-50 cursor-pointer">
+                            <input type="radio" name="q${questionIndex}" value="${i}" class="mr-3">
+                            ${option}
+                        </label>
+                    `).join('');
+                    contentHtml = `<div class="space-y-3">${optionsHtml}</div>`;
+
+                } else if (item.type === 'fill') {
+                    // 穴埋め問題のHTML
+                    const placeholder = item.question.replace("[ ]", "");
+                    contentHtml = `
+                        <label class="block text-gray-700 mb-2" for="q${questionIndex}">${placeholder}</label>
+                        <input type="text" id="q${questionIndex}" name="q${questionIndex}" 
+                               class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="解答を入力してください">
+                    `;
+                }
+
+                // 問題カードのHTML
+                const cardHtml = `
+                    <div class="bg-white p-6 rounded-lg shadow-md border-2 border-transparent" id="card-q${questionIndex}">
+                        <!-- 問題文 -->
+                        <h2 class="text-xl font-bold text-gray-800 mb-5">
+                            <span class="text-purple-600 mr-2">問 ${questionIndex}</span>
+                            ${item.question.replace("[ ]", "<span class='font-bold text-blue-600'>[ ]</span>")}
+                        </h2>
+                        
+                        <!-- 問題コンテンツ (4択 or 記入) -->
+                        ${contentHtml}
+
+                        <!-- 正解フィードバックエリア -->
+                        <div class="answer-feedback" id="feedback-q${questionIndex}"></div>
+                    </div>
+                `;
+                
+                form.innerHTML += cardHtml;
+            });
+
+            // D採点ボタンのイベントリスナー
+            const submitButton = document.getElementById('submit-button');
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault(); // フォームの送信をキャンセル
+                gradeTest();
+            });
+        });
+
+        // 採点処理を行う関数
+        function gradeTest() {
+            let score = 0;
+            const form = document.getElementById('test-form');
+
+            testData.forEach((item, index) => {
+                const questionIndex = index + 1;
+                const card = document.getElementById(`card-q${questionIndex}`);
+                const feedback = document.getElementById(`feedback-q${questionIndex}`);
+                let isCorrect = false;
+                let answerText = '';
+
+                if (item.type === 'mcq') {
+                    // 4択問題の採点
+                    const selected = form.querySelector(`input[name="q${questionIndex}"]:checked`);
+                    if (selected && parseInt(selected.value) === item.correctIndex) {
+                        isCorrect = true;
+                    }
+                    answerText = `正解: ${item.options[item.correctIndex]}`;
+
+                } else if (item.type === 'fill') {
+                    // 穴埋め問題の採点
+                    const input = document.getElementById(`q${questionIndex}`);
+                    const userAnswer = input.value.trim().toLowerCase();
+                    
+                    // キーワードのいずれかを含んでいれば正解
+                    isCorrect = item.keywords.some(keyword => userAnswer.includes(keyword.toLowerCase()));
+                    answerText = `正解キーワード: ${item.keywords.join(' / ')}`;
+                }
+
+                // スコア加算とフィードバック表示
+                if (isCorrect) {
+                    score++;
+                    card.classList.remove('incorrect');
+                    card.classList.add('correct');
+                    feedback.innerHTML = `<strong>正解！</strong><br>${answerText}`;
+                } else {
+                    card.classList.remove('correct');
+                    card.classList.add('incorrect');
+                    feedback.innerHTML = `<strong>不正解...</strong><br>${answerText}`;
+                }
+                feedback.style.display = 'block';
+            });
+
+            // 合計スコアの表示
+            const scoreContainer = document.getElementById('score-container');
+            const scoreText = document.getElementById('score-text');
+            scoreText.textContent = `あなたのスコア: ${score} / ${testData.length} 点`;
+            scoreContainer.style.display = 'block';
+
+            // 採点ボタンを非表示にし、ページ上部にスクロール
+            document.getElementById('submit-button').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>練習問題 (30問) | 5-1 放送</title>
+    <!-- Tailwind CSSの読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans JP) の読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        /* 解答・解説エリアのデフォルトを非表示にする */
+        .explanation {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        
+        <!-- ヘッダー -->
+        <header class="mb-8 py-4 border-b-2 border-blue-600">
+            <h1 class="text-3xl font-bold text-gray-800">練習問題 (30問)</h1>
+            <p class="text-lg text-gray-600 mt-1">5-1 放送（地上デジタルテレビ放送）</p>
+        </header>
+
+        <!-- 問題リストコンテナ -->
+        <main id="practice-container" class="space-y-6">
+            <!-- 問題はJavaScriptによってここに挿入されます -->
+        </main>
+
+        <!-- フッター (トップへ戻る) -->
+        <footer class="mt-12 pt-6 border-t border-gray-300 text-center">
+            <a href="./index.html" 
+               class="inline-block bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-300">
+                トップページに戻る
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // 練習問題データ (30問)
+        // 実際には、quiz_172 のJSONデータを解析してこの形式にします。
+        // quiz_172 のJSON構造が `{"Hk": [{"question": "...", "HE": [...], "M8": "...", ...}]}` ではないと仮定し、
+        // 前回の生成（quiz immersive）で使ったJSON構造に準拠します。
+        const practiceData = [
+            {
+                "question": "日本の地上デジタルテレビ放送の標準方式は何と呼ばれますか？",
+                "options": [
+                    "ISDB-T",
+                    "DVB-T",
+                    "ATSC",
+                    "OFDM"
+                ],
+                "correctIndex": 0,
+                "explanation": "ISDB-T (Integrated Services Digital Broadcasting - Terrestrial) は、日本で使用されている地上デジタル放送の規格です。OFDMは伝送方式の名称です。"
+            },
+            {
+                "question": "地上デジタル放送で使用されている主な周波数帯はどれですか？",
+                "options": [
+                    "VHF帯 (超短波)",
+                    "UHF帯 (極超短波)",
+                    "SHF帯 (マイクロ波)",
+                    "MF帯 (中波)"
+                ],
+                "correctIndex": 1,
+                "explanation": "地デジは、470MHz～710MHzのUHF帯（物理チャンネル13ch～52ch）を使用しています。"
+            },
+            {
+                "question": "地上デジタル放送の1チャンネルが占有する周波数帯域幅はどれですか？",
+                "options": [
+                    "1.3MHz",
+                    "5.57MHz",
+                    "6MHz",
+                    "13MHz"
+                ],
+                "correctIndex": 2,
+                "explanation": "1つの物理チャンネルが占有する周波数幅は6MHzで、これはアナログ放送時代から引き継がれています。"
+            },
+            {
+                "question": "地デジの伝送方式として採用されている、マルチパス妨害に強い特徴を持つ方式は何ですか？",
+                "options": [
+                    "QAM",
+                    "MPEG-2",
+                    "ISDB-T",
+                    "OFDM"
+                ],
+                "correctIndex": 3,
+                "explanation": "OFDM (直交周波数分割多重) は、帯域を多数の搬送波に分割する伝送方式で、ビルなどの反射波（マルチパス）に強い特性を持ちます。"
+            },
+            {
+                "question": "地上デジタル放送の1チャンネル (6MHz) は、いくつのセグメントに分割されていますか？",
+                "options": [
+                    "1セグメント",
+                    "6セグメント",
+                    "12セグメント",
+                    "13セグメント"
+                ],
+                "correctIndex": 3,
+                "explanation": "1チャンネル (6MHz) の帯域幅は、合計13個のセグメントで構成されています。"
+            },
+            {
+                "question": "高画質のハイビジョン放送（フルセグ）を行うために、13セグメントのうちいくつを使用しますか？",
+                "options": [
+                    "1セグメント",
+                    "3セグメント",
+                    "12セグメント",
+                    "13セグメント"
+                ],
+                "correctIndex": 2,
+                "explanation": "13セグメントのうち12セグメントを使用して、高画質のハイビジョン放送（フルセグ）が行われます。"
+            },
+            {
+                "question": "携帯電話やカーナビなどの移動体向け放送「ワンセグ」の名称の由来となったセグメント数はどれですか？",
+                "options": [
+                    "1セグメント",
+                    "2セグメント",
+                    "6セグメント",
+                    "13セグメント"
+                ],
+                "correctIndex": 0,
+                "explanation": "「ワンセグ」という名称は、「1セグメント」を使用して放送することに由来します。"
+            },
+            {
+                "question": "地デジ（フルセグ）で主に使用される変調方式で、一度に6ビットの情報を表現できる方式はどれですか？",
+                "options": [
+                    "OFDM",
+                    "16QAM",
+                    "64QAM",
+                    "256QAM"
+                ],
+                "correctIndex": 2,
+                "explanation": "64QAM (ろくよんカム) は、一度に6ビット ($2^6 = 64$) の情報を表現でき、日本の地デジ（フルセグ）で主に使用されます。"
+            },
+            {
+                "question": "地上デジタル放送において、従来の標準放送（SDTV相当）の品質の場合、1チャンネルで最大何本の番組を同時に放送可能ですか？",
+                "options": [
+                    "1本",
+                    "3本",
+                    "12本",
+                    "13本"
+                ],
+                "correctIndex": 1,
+                "explanation": "SDTV 1番組あたり約4～5Mbps程度必要なため、1チャンネル（約13Mbps）で3本の番組を同時に放送することが可能です。"
+            },
+            {
+                "question": "地上デジタル放送において、ハイビジョン放送（HDTV）は1チャンネルで最大何本まで同時に放送できますか？",
+                "options": [
+                    "1本",
+                    "2本",
+                    "3本",
+                    "12本"
+                ],
+                "correctIndex": 0,
+                "explanation": "HDTV（フルセグ）は1番組で12セグメント（ほぼチャンネル帯域すべて）を使用するため、同時に放送できるのは1本です。"
+            },
+            {
+                "question": "地上デジタル放送の信号に、映像や音声のほかに多重化されているデータの例として、適切でないものはどれですか？",
+                "options": [
+                    "データ放送",
+                    "緊急警報放送",
+                    "字幕・文字多重放送",
+                    "個別のインターネット通信"
+                ],
+                "correctIndex": 3,
+                "explanation": "放送電波は一方的に送信されるものであり、視聴者個別のインターネット通信データ（Eメールなど）は含まれません。"
+            },
+            {
+                "question": "地デジで使用されるOFDM伝送方式の長所として、誤っているものはどれですか？",
+                "options": [
+                    "マルチパス妨害（ゴースト障害）に強い",
+                    "周波数利用効率が高い",
+                    "移動体受信に強い",
+                    "伝送装置の構成が非常に単純である"
+                ],
+                "correctIndex": 3,
+                "explanation": "OFDMは多数のキャリアを同時に処理するため、高速なデジタル信号処理（FFTなど）が必要であり、伝送装置の構成はアナログ方式に比べて複雑になります。"
+            },
+            {
+                "question": "地上デジタル放送で使用される映像符号化方式（圧縮方式）は、主にどれですか？",
+                "options": [
+                    "MPEG-1",
+                    "MPEG-2",
+                    "MP3",
+                    "HEVC (H.265)"
+                ],
+                "correctIndex": 1,
+                "explanation": "MPEG-2 (H.262) は、DVDやデジタル放送（HDTVまで対応）で広く採用されている映像符号化方式です。"
+            },
+            {
+                "question": "地上デジタル放送で使用される音声符号化方式（圧縮方式）は、主にどれですか？",
+                "options": [
+                    "MP3",
+                    "MPEG-2 AAC",
+                    "WAV",
+                    "Dolby Digital"
+                ],
+                "correctIndex": 1,
+                "explanation": "MPEG-2 AAC (Advanced Audio Codec) は、地デジの音声圧縮形式として採用されており、2.0chステレオや5.1chサラウンドを提供します。"
+            },
+            {
+                "question": "ワンセグ放送用の1セグメントは、13セグメントのうち、どの位置に配置されていますか？",
+                "options": [
+                    "中央",
+                    "一番端（周波数が低い側）",
+                    "一番端（周波数が高い側）",
+                    "放送局が自由に選択できる"
+                ],
+                "correctIndex": 0,
+                "explanation": "ワンセグ用のセグメントは、13セグメントの中央 (0番) に配置され、移動体でも受信しやすいよう工夫されています。"
+            },
+            {
+                "question": "「マルチパス」とはどのような現象ですか？",
+                "options": [
+                    "信号が複数の経路（反射波など）を通って受信機に到達する現象",
+                    "1チャンネルで複数の番組を同時に放送する技術",
+                    "電波が弱すぎて受信機に信号が届かない現象",
+                    "異なる放送局の電波が混信してしまう現象"
+                ],
+                "correctIndex": 0,
+                "explanation": "ビルなどの障害物で反射した電波が、直接届く電波と干渉しあう現象をマルチパス（多重経路）妨害と呼びます。"
+            },
+            {
+                "question": "OFDM方式がマルチパスに強い理由として、利用されている技術はどれですか？",
+                "options": [
+                    "非常に短いシンボル期間",
+                    "ガードインターバル",
+                    "MPEG-2圧縮",
+                    "B-CASカードによる暗号化"
+                ],
+                "correctIndex": 1,
+                "explanation": "シンボル（データの区切り）の間に「ガードインターバル」と呼ばれる空き時間を設けることで、遅れて到着する反射波の影響を吸収できます。"
+            },
+            {
+                "question": "地デジの物理チャンネルとして使用されている範囲はどれですか？",
+                "options": [
+                    "1ch～12ch",
+                    "13ch～52ch",
+                    "13ch～62ch",
+                    "1ch～62ch"
+                ],
+                "correctIndex": 1,
+                "explanation": "地デジでは、UHF帯の470MHz～710MHzが割り当てられ、これは物理チャンネルの13ch～52chに相当します。"
+            },
+            {
+                "question": "OFDMにおいて、1つのチャンネル帯域幅を細かく分割した個々の搬送波を何と呼びますか？",
+                "options": [
+                    "セグメント",
+                    "サブキャリア",
+                    "シンボル",
+                    "フレーム"
+                ],
+                "correctIndex": 1,
+                "explanation": "OFDMは、1つの帯域を「サブキャリア」と呼ばれる多数の狭い周波数帯域の搬送波に分割してデータを乗せる技術です。"
+            },
+            {
+                "question": "地上デジタル放送に関する記述として、適当なものはどれですか？",
+                "options": [
+                    "1チャネルでHDTVの放送を3本同時に放送できる。",
+                    "映像や音声のほかに、データ放送等のデータが多重化されている。",
+                    "1チャネルの周波数帯域幅は13MHzである。",
+                    "主にVHF帯の電波が使用されている。"
+                ],
+                "correctIndex": 1,
+                "explanation": "地デジでは、映像・音声に加え、EPG（電子番組表）や天気予報などのデータ放送、字幕データなども同時に送信されています。"
+            },
+            {
+                "question": "地上デジタル放送に関する記述として、適当でないものはどれですか？",
+                "options": [
+                    "伝送には、UHF帯の電波が使用されている。",
+                    "一つのチャネルで3本のハイビジョン放送 (HDTV) が放送できる。",
+                    "デジタル変調方式 (OFDM) は、マルチパス妨害による干渉に強い。",
+                    "信号には、映像や音声のほかにデータ放送などのデータが多重化されている。"
+                ],
+                "correctIndex": 1,
+                "explanation": "HDTV（ハイビジョン）は1本で12セグメントを必要とするため、1チャンネル（13セグメント）で3本放送することはできません。3本可能なのはSDTV（標準画質）です。"
+            },
+            {
+                "question": "地上デジタル放送に関する記述として、適当でないものはどれですか？",
+                "options": [
+                    "伝送中の情報の誤りを訂正するため圧縮符号を付加している。",
+                    "デジタル変調方式には、直交周波数分割多重 (OFDM) 方式が使用されている。",
+                    "符号化には、MPEG-2と呼ばれる方式が使用されている。",
+                    "有料放送などでは、放送信号を暗号化して放送している。"
+                ],
+                "correctIndex": 0,
+                "explanation": "情報の誤りを訂正するのは「誤り訂正符号」です。「圧縮符号」はデータ量を小さくする（圧縮する）ためのもので、目的が異なります。"
+            },
+            {
+                "question": "64QAM変調方式において、一度に表現できる情報量は何ビットですか？",
+                "options": [
+                    "2ビット",
+                    "4ビット",
+                    "6ビット",
+                    "8ビット"
+                ],
+                "correctIndex": 2,
+                "explanation": "6ビットで $2^6 = 64$ 通りの情報を表現できるため、64QAMと呼ばれます。"
+            },
+            {
+                "question": "アナログ放送で問題となった、ビルなどに反射した電波が干渉して映像が二重に映る現象を何と呼びますか？",
+                "options": [
+                    "ゴースト障害",
+                    "フェージング",
+                    "スノーノイズ",
+                    "セグメントエラー"
+                ],
+                "correctIndex": 0,
+                "explanation": "反射波（マルチパス）が遅れて受信されることにより、主信号の映像に加えて、幽霊 (Ghost) のようにずれた映像が映る障害です。"
+            },
+            {
+                "question": "地デジのデータ放送などで使用される、コンテンツを記述するための言語は何ですか？",
+                "options": [
+                    "HTML",
+                    "BML",
+                    "Java",
+                    "MPEG-2"
+                ],
+                "correctIndex": 1,
+                "explanation": "BML (Broadcast Markup Language) は、日本のデータ放送（ARIB規格）で使用される、XMLベースの記述言語です。"
+            },
+            {
+                "question": "国際的な標準化を行う組織で、MPEG-2などの規格を策定した組織の組み合わせとして正しいものはどれですか？",
+                "options": [
+                    "ISO/IEC と ITU-T",
+                    "ARIB と NHK",
+                    "IEEE と W3C",
+                    "MPEG と ISDB"
+                ],
+                "correctIndex": 0,
+                "explanation": "ISO (国際標準化機構) / IEC (国際電気標準会議) と ITU-T (国際電気通信連合 電気通信標準化部門) は、共同でMPEG-2などの映像符号化方式を標準化しました。"
+            },
+            {
+                "question": "MPEG-2は、別名どの規格番号で呼ばれることもありますか？",
+                "options": [
+                    "H.262",
+                    "H.264",
+                    "H.265",
+                    "H.222"
+                ],
+                "correctIndex": 0,
+                "explanation": "MPEG-2 Videoは、ITU-Tの規格番号であるH.262としても知られています。"
+            },
+            {
+                "question": "MPEG-4（H.264）と比較した、HEVC（H.265）の主な特徴はどれですか？",
+                "options": [
+                    "圧縮効率が約半分である",
+                    "圧縮効率が約2倍である",
+                    "音声圧縮専用の規格である",
+                    "主にDVDで使用される"
+                ],
+                "correctIndex": 1,
+                "explanation": "HEVC (H.265) はMPEG-4 (H.264) と比較して、約2倍の圧縮効率（同じ画質でデータ量が約半分）を実現するとされています。"
+            },
+            {
+                "question": "OFDMにおいて、シンボル期間を長く取ることができる主な理由は何ですか？",
+                "options": [
+                    "伝送するデータ量を減らしているから",
+                    "データを多数のサブキャリアに分割して並列に伝送するから",
+                    "変調方式を64QAMに限定しているから",
+                    "周波数帯域幅を6MHzにしているから"
+                ],
+                "correctIndex": 1,
+                "explanation": "データを多数の低速なサブキャリアに分割（並列化）することで、各サブキャリアのシンボル期間（1シンボルを送る時間）を長く取ることが可能になります。"
+            },
+            {
+                "question": "日本の地上デジタル放送で、コピー制御や有料放送の視聴制御に使用されている仕組みは何ですか？",
+                "options": [
+                    "MPEG-2",
+                    "OFDM",
+                    "B-CASカード",
+                    "AAC"
+                ],
+                "correctIndex": 2,
+                "explanation": "B-CASカード（およびその後継のACASチップ）は、暗号化された放送信号を復号し、コピー制御（ダビング10など）や有料放送の視聴制御を行うために使用されます。"
+            }
+        ];
+
+        // ページ読み込み時に問題を描画する
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('practice-container');
+            if (!container) return;
+
+            practiceData.forEach((item, index) => {
+                const questionIndex = index + 1;
+                
+                // 選択肢のHTMLを生成
+                const optionsHtml = item.options.map((option, i) => {
+                    const isCorrect = i === item.correctIndex;
+                    return `
+                        <li class="${isCorrect ? 'font-bold text-green-700' : ''}">
+                            ${i + 1}. ${option} ${isCorrect ? ' (正解)' : ''}
+                        </li>
+                    `;
+                }).join('');
+
+                // 問題カードのHTML
+                const cardHtml = `
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <!-- 問題文 -->
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">
+                            <span class="text-blue-600 mr-2">問 ${questionIndex}</span>
+                            ${item.question}
+                        </h2>
+                        
+                        <!-- 選択肢 (解答・解説エリア内に表示) -->
+                        <div class="explanation p-4 bg-gray-50 rounded-md border border-gray-200 mt-4" id="explanation-${questionIndex}">
+                            <h3 class="text-lg font-semibold text-gray-700">解答・解説</h3>
+                            <ul class="list-none space-y-2 mt-3 mb-4 text-gray-600">
+                                ${optionsHtml}
+                            </ul>
+                            <p class="text-gray-700 leading-relaxed">
+                                <span class="font-semibold text-indigo-600">解説:</span>
+                                ${item.explanation}
+                            </p>
+                        </div>
+
+                        <!-- 解答・解説ボタン -->
+                        <div class="mt-4 text-right">
+                            <button 
+                                onclick="toggleExplanation(${questionIndex})" 
+                                class="toggle-button bg-blue-500 text-white font-semibold py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-200"
+                                id="button-${questionIndex}">
+                                解答・解説を表示
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += cardHtml;
+            });
+        });
+
+        // 解答・解説の表示/非表示を切り替える関数
+        function toggleExplanation(questionIndex) {
+            const explanation = document.getElementById(`explanation-${questionIndex}`);
+            const button = document.getElementById(`button-${questionIndex}`);
+
+            if (explanation.style.display === 'none' || explanation.style.display === '') {
+                explanation.style.display = 'block';
+                button.textContent = '解答・解説を隠す';
+                button.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                button.classList.add('bg-gray-500', 'hover:bg-gray-600');
+            } else {
+                explanation.style.display = 'none';
+                button.textContent = '解答・解説を表示';
+                button.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                button.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }
+        }
+    </script>
+
+</body>
+</html>
